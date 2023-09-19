@@ -1,0 +1,374 @@
+# pvc:
+#   name: pvc-bc100
+#   storage: 4Gi
+#   accessModes:
+#   - ReadWriteOnce
+# deployments:
+#   - deployment_name: mockserver-deployment
+#     label_name: mockserver-pod
+#     container_name: mockserver-container
+#     replicaCount: 1
+#     image:
+#       repository: ghcr.io/satyanarayana-senapathi/auth0-bootcamp2-mockserver:v3
+#     imagePullSecrets: my-ghcr-secret
+#     port: 3005   
+
+#   - deployment_name: frontend-deployment
+#     label_name: frontend-pod
+#     container_name: frontend-container
+#     replicaCount: 1     
+#     image:
+#       repository: ghcr.io/satyanarayana-senapathi/auth0-bootcamp-frontend:v6
+#     imagePullSecrets: my-ghcr-secret
+#     port: 80
+
+#   - deployment_name: database-deployment
+#     label_name: database-pod
+#     container_name: database-container
+#     replicaCount: 1     
+#     image:
+#       repository: ghcr.io/satyanarayana-senapathi/auth0-bootcamp-database:v1
+#     imagePullSecrets: my-ghcr-secret
+#     envFrom: database-secret  
+#     port: 3306
+#     volumeMounts:
+#     - mountPath: /var/lib/mysql
+#       name: mysql-volume
+#     volumes: 
+#     - name: mysql-volume
+#       persistentVolumeClaim:
+#         claimName: pvc-bc100
+
+#   - deployment_name: service-registry-deployment
+#     label_name: service-registry-pod
+#     container_name: service-registry-container
+#     replicaCount: 1     
+#     image:
+#       repository:  ghcr.io/satyanarayana-senapathi/auth0-bootcamp-backend-service-registry:v24
+#     imagePullSecrets: my-ghcr-secret
+#     port: 8761
+#     env:
+#     - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+#       value: https://api1.spcluster.tk/eureka/
+      
+#     - name: EUREKA_INSTANCE_HOSTNAME
+#       value: service-registry-service
+
+#   - deployment_name: cloud-gateway-deployment
+#     label_name: cloud-gateway-pod
+#     container_name: cloud-gateway-container
+#     replicaCount: 1     
+#     image:
+#       repository:  ghcr.io/satyanarayana-senapathi/auth0-bootcamp-backend-cloud-gateway:v24
+#     imagePullSecrets: my-ghcr-secret
+#     port: 9191
+#     env:
+#     - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+#       value: https://api1.spcluster.tk/eureka/
+      
+#     - name: EUREKA_INSTANCE_HOSTNAME
+#       value: cloud-gateway-service
+    
+#   - deployment_name: address-service-deployment
+#     label_name: address-service-pod
+#     container_name: address-service-container
+#     replicaCount: 1     
+#     image:
+#       repository: ghcr.io/satyanarayana-senapathi/auth0-bootcamp-backend-address-service:v24
+#     imagePullSecrets: my-ghcr-secret
+#     port: 9001
+#     env:
+#     - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+#       value: https://api1.spcluster.tk/eureka/
+
+#     - name: SPRING_DATASOURCE_URL
+#       value: jdbc:mysql://54.197.220.35:30002/zemoso_diagnostics?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+
+#     - name: SPRING_DATASOURCE_PASSWORD
+#       value: bc@95
+      
+#     - name: EUREKA_INSTANCE_HOSTNAME
+#       value: address-service
+  
+#   - deployment_name: appointment-service-deployment
+#     label_name: appointment-service-pod
+#     container_name: appointment-service-container
+#     replicaCount: 1     
+#     image:
+#       repository: ghcr.io/satyanarayana-senapathi/auth0-bootcamp-backend-appointment-service:v24
+#     imagePullSecrets: my-ghcr-secret
+#     port: 9002
+#     env:
+#     - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+#       value: https://api1.spcluster.tk/eureka/
+
+#     - name: SPRING_DATASOURCE_URL
+#       value: jdbc:mysql://54.197.220.35:30002/zemoso_diagnostics?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+
+#     - name: SPRING_DATASOURCE_PASSWORD
+#       value: bc@95
+      
+#     - name: EUREKA_INSTANCE_HOSTNAME
+#       value: appointment-service
+  
+#   - deployment_name: card-service-deployment
+#     label_name: card-service-pod
+#     container_name: card-service-container
+#     replicaCount: 1     
+#     image:
+#       repository: ghcr.io/satyanarayana-senapathi/auth0-bootcamp-backend-card-service:v24
+#     imagePullSecrets: my-ghcr-secret
+#     port: 9003
+#     env:
+#     - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+#       value: https://api1.spcluster.tk/eureka/
+
+#     - name: SPRING_DATASOURCE_URL
+#       value: jdbc:mysql://54.197.220.35:30002/zemoso_diagnostics?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+
+#     - name: SPRING_DATASOURCE_PASSWORD
+#       value: bc@95
+      
+#     - name: EUREKA_INSTANCE_HOSTNAME
+#       value: card-service
+
+#   - deployment_name: lab-service-deployment
+#     label_name: lab-service-pod
+#     container_name: lab-service-container
+#     replicaCount: 1     
+#     image:
+#       repository: ghcr.io/satyanarayana-senapathi/auth0-bootcamp-backend-lab-service:v24
+#     imagePullSecrets: my-ghcr-secret
+#     port: 9004
+#     env:
+#     - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+#       value: https://api1.spcluster.tk/eureka/
+
+#     - name: SPRING_DATASOURCE_URL
+#       value: jdbc:mysql://54.197.220.35:30002/zemoso_diagnostics?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+
+#     - name: SPRING_DATASOURCE_PASSWORD
+#       value: bc@95
+      
+#     - name: EUREKA_INSTANCE_HOSTNAME
+#       value: lab-service
+  
+#   - deployment_name: patient-service-deployment
+#     label_name: patient-service-pod
+#     container_name: patient-service-container
+#     replicaCount: 1     
+#     image:
+#       repository: ghcr.io/satyanarayana-senapathi/auth0-bootcamp-backend-patient-service:v24
+#     imagePullSecrets: my-ghcr-secret
+#     port: 9005
+#     env:
+#     - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+#       value: https://api1.spcluster.tk/eureka/
+
+#     - name: SPRING_DATASOURCE_URL
+#       value: jdbc:mysql://54.197.220.35:30002/zemoso_diagnostics?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+
+#     - name: SPRING_DATASOURCE_PASSWORD
+#       value: bc@95
+      
+#     - name: EUREKA_INSTANCE_HOSTNAME
+#       value: patient-service
+  
+#   - deployment_name: test-lab-service-deployment
+#     label_name: test-lab-service-pod
+#     container_name: test-lab-service-container
+#     replicaCount: 1     
+#     image:
+#       repository: ghcr.io/satyanarayana-senapathi/auth0-bootcamp-backend-test-lab-service:v24
+#     imagePullSecrets: my-ghcr-secret
+#     port: 9006
+#     env:
+#     - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+#       value: https://api1.spcluster.tk/eureka/
+
+#     - name: SPRING_DATASOURCE_URL
+#       value: jdbc:mysql://54.197.220.35:30002/zemoso_diagnostics?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+
+#     - name: SPRING_DATASOURCE_PASSWORD
+#       value: bc@95
+      
+#     - name: EUREKA_INSTANCE_HOSTNAME
+#       value: test-lab-service
+  
+#   - deployment_name: test-service-deployment
+#     label_name: test-service-pod
+#     container_name: test-service-container
+#     replicaCount: 1     
+#     image:
+#       repository: ghcr.io/satyanarayana-senapathi/auth0-bootcamp-backend-test-service:v24
+#     imagePullSecrets: my-ghcr-secret
+#     port: 9007
+#     env:
+#     - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+#       value: https://api1.spcluster.tk/eureka/
+
+#     - name: SPRING_DATASOURCE_URL
+#       value: jdbc:mysql://54.197.220.35:30002/zemoso_diagnostics?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+
+#     - name: SPRING_DATASOURCE_PASSWORD
+#       value: bc@95
+      
+#     - name: EUREKA_INSTANCE_HOSTNAME
+#       value: test-service
+
+#   - deployment_name: user-service-deployment
+#     label_name: user-service-pod
+#     container_name: user-service-container
+#     replicaCount: 1     
+#     image:
+#       repository: ghcr.io/satyanarayana-senapathi/auth0-bootcamp-backend-user-service:v24
+#     imagePullSecrets: my-ghcr-secret
+#     port: 9008
+#     env:
+#     - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+#       value: https://api1.spcluster.tk/eureka/
+
+#     - name: SPRING_DATASOURCE_URL
+#       value: jdbc:mysql://54.197.220.35:30002/zemoso_diagnostics?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+
+#     - name: SPRING_DATASOURCE_PASSWORD
+#       value: bc@95
+      
+#     - name: EUREKA_INSTANCE_HOSTNAME
+#       value: user-service
+  
+
+
+# services:
+
+#   - service_name: mockserver-service
+#     label_name: mockserver-pod
+#     type: ClusterIP
+#     port: 3005
+#     targetPort: 3005
+  
+#   - service_name: frontend-service
+#     label_name: frontend-pod
+#     type: ClusterIP
+#     port: 80
+#     targetPort: 80
+  
+#   - service_name: database-service
+#     label_name: database-pod
+#     type: NodePort
+#     port: 3306
+#     targetPort: 3306
+#     nodePort: 30002
+
+#   - service_name: service-registry-service
+#     label_name: service-registry-pod
+#     type: ClusterIP
+#     port: 8761
+#     targetPort: 8761
+
+#   - service_name: cloud-gateway-service
+#     label_name: cloud-gateway-pod
+#     type: ClusterIP
+#     port: 9191
+#     targetPort: 9191
+  
+#   - service_name: address-service
+#     label_name: address-service-pod
+#     type: ClusterIP
+#     port: 9001
+#     targetPort: 9001
+  
+#   - service_name: appointment-service
+#     label_name: appointment-service-pod
+#     type: ClusterIP
+#     port: 9002
+#     targetPort: 9002
+
+#   - service_name: card-service
+#     label_name: card-service-pod
+#     type: ClusterIP
+#     port: 9003
+#     targetPort: 9003
+
+#   - service_name: lab-service
+#     label_name: lab-service-pod
+#     type: ClusterIP
+#     port: 9004
+#     targetPort: 9004
+  
+#   - service_name: patient-service
+#     label_name: patient-service-pod
+#     type: ClusterIP
+#     port: 9005
+#     targetPort: 9005
+  
+#   - service_name: test-lab-service
+#     label_name: test-lab-service-pod
+#     type: ClusterIP
+#     port: 9006
+#     targetPort: 9006
+
+#   - service_name: test-service
+#     label_name: test-service-pod
+#     type: ClusterIP
+#     port: 9007
+#     targetPort: 9007
+
+#   - service_name: user-service
+#     label_name: user-service-pod
+#     type: ClusterIP
+#     port: 9008
+#     targetPort: 9008
+
+# ingress:
+#   enabled: "true"
+#   name: my-ingress
+#   className: nginx
+#   sslcertificate: arn:aws:acm:us-east-1:365299945243:certificate/8150c196-fd5a-4884-8047-1cdf8ccfc7a7
+#   annotations: {nginx.ingress.kubernetes.io/use-regex: "true"}
+#   rules:
+#   - host: fr1.spcluster.tk
+#     http:
+#       paths:
+#       - path: /
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: frontend-service
+#             port:
+#               number: 80
+#   - host: ms1.spcluster.tk
+#     http:
+#       paths:
+#       - path: /
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: mockserver-service
+#             port:
+#               number: 3005
+#   - host: api1.spcluster.tk
+#     http:
+#       paths:
+#       - path: /$
+#         pathType: Exact
+#         backend:
+#           service:
+#             name: service-registry-service
+#             port:
+#               number: 8761
+#       - path: /eureka
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: service-registry-service
+#             port:
+#               number: 8761
+#       - path: /
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: cloud-gateway-service
+#             port:
+#               number: 9191
+
