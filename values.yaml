@@ -308,6 +308,9 @@
 #     port: 9006
 #     targetPort: 9006
 
+
+
+
 #   - service_name: test-service
 #     label_name: test-service-pod
 #     type: ClusterIP
