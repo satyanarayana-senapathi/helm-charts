@@ -1,5 +1,5 @@
 # pvc:
-#   name: pvc-bc100
+#   name: database
 #   storage: 4Gi
 #   accessModes:
 #   - ReadWriteOnce
@@ -9,7 +9,7 @@
 #     container_name: mockserver-container
 #     replicaCount: 1
 #     image:
-#       repository: ghcr.io/satyanarayana-senapathi/auth0-bootcamp2-mockserver:v3
+#       repository: ghcr.io/satyanarayana-senapathi/bootcamp2-mockserver:latest
 #     imagePullSecrets: my-ghcr-secret
 #     port: 3005   
 
@@ -18,7 +18,7 @@
 #     container_name: frontend-container
 #     replicaCount: 1     
 #     image:
-#       repository: ghcr.io/satyanarayana-senapathi/auth0-bootcamp-frontend:v6
+#       repository: ghcr.io/satyanarayana-senapathi/bootcamp-frontend:latest
 #     imagePullSecrets: my-ghcr-secret
 #     port: 80
 
@@ -27,59 +27,65 @@
 #     container_name: database-container
 #     replicaCount: 1     
 #     image:
-#       repository: ghcr.io/satyanarayana-senapathi/auth0-bootcamp-database:v1
+#       repository: mysql:latest
 #     imagePullSecrets: my-ghcr-secret
 #     envFrom: database-secret  
 #     port: 3306
 #     volumeMounts:
 #     - mountPath: /var/lib/mysql
 #       name: mysql-volume
+#     - name:  database-config
+#       mountPath: /etc/mysql/conf.d/
 #     volumes: 
 #     - name: mysql-volume
 #       persistentVolumeClaim:
-#         claimName: pvc-bc100
+#         claimName: database
+#     - name: database-config
+#       configMap:
+#       name: mysql-config
+#       optional: false
 
 #   - deployment_name: service-registry-deployment
 #     label_name: service-registry-pod
 #     container_name: service-registry-container
 #     replicaCount: 1     
 #     image:
-#       repository:  ghcr.io/satyanarayana-senapathi/auth0-bootcamp-backend-service-registry:v24
+#       repository:  ghcr.io/satyanarayana-senapathi/bootcamp-backend-service-registry:latest
 #     imagePullSecrets: my-ghcr-secret
 #     port: 8761
 #     env:
 #     - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
-#       value: https://api1.spcluster.tk/eureka/
+#       value: https://api1.bootcamp64.tk/eureka/
       
 #     - name: EUREKA_INSTANCE_HOSTNAME
 #       value: service-registry-service
 
-#   - deployment_name: cloud-gateway-deployment
-#     label_name: cloud-gateway-pod
-#     container_name: cloud-gateway-container
+#   - deployment_name: api-gateway-deployment
+#     label_name: api-gateway-pod
+#     container_name: api-gateway-container
 #     replicaCount: 1     
 #     image:
-#       repository:  ghcr.io/satyanarayana-senapathi/auth0-bootcamp-backend-cloud-gateway:v24
+#       repository:  ghcr.io/satyanarayana-senapathi/bootcamp-backend-api-gateway:latest
 #     imagePullSecrets: my-ghcr-secret
 #     port: 9191
 #     env:
 #     - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
-#       value: https://api1.spcluster.tk/eureka/
+#       value: https://api1.bootcamp64.tk/eureka/
       
 #     - name: EUREKA_INSTANCE_HOSTNAME
-#       value: cloud-gateway-service
+#       value: api-gateway-service
     
 #   - deployment_name: address-service-deployment
 #     label_name: address-service-pod
 #     container_name: address-service-container
 #     replicaCount: 1     
 #     image:
-#       repository: ghcr.io/satyanarayana-senapathi/auth0-bootcamp-backend-address-service:v24
+#       repository: ghcr.io/satyanarayana-senapathi/bootcamp-backend-address-service:latest
 #     imagePullSecrets: my-ghcr-secret
 #     port: 9001
 #     env:
 #     - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
-#       value: https://api1.spcluster.tk/eureka/
+#       value: https://api1.bootcamp64.tk/eureka/
 
 #     - name: SPRING_DATASOURCE_URL
 #       value: jdbc:mysql://54.197.220.35:30002/zemoso_diagnostics?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
@@ -90,6 +96,48 @@
 #     - name: EUREKA_INSTANCE_HOSTNAME
 #       value: address-service
   
+#   - deployment_name: example-deployment
+#     replicaCount: 3
+#     label_name: example-app
+#     container_name: example-container
+#     image:
+#       repository: nginx:latest
+#     envFrom: example-secret
+#     env:
+#       - name: ENV_VAR1
+#         value: value1
+#       - name: ENV_VAR2
+#         value: value2
+#     port: 80
+#     livenessProbe:
+#       path: /healthz
+#       port: 8080
+#       initialDelaySeconds: 3
+#       periodSeconds: 5
+#     readinessProbe:
+#       path: /readiness
+#       port: 8080
+#       initialDelaySeconds: 5
+#       periodSeconds: 10
+#     volumeMounts:
+#       - name: data-volume
+#         mountPath: /data
+#     imagePullSecrets: my-registry-secret
+#     affinity:
+#       nodeSelectorKey: node-role
+#       nodeSelectorOperator: In
+#       nodeSelectorValue: worker
+#     tolerations:
+#       - key: "example-key"
+#         operator: "Equal"
+#         value: "example-value"
+#         effect: "NoSchedule"
+#     taints:
+#       example-key: example-value:NoSchedule
+#     volumes:
+#       - name: data-volume
+#         emptyDir: {}
+
 
 
 # services:
@@ -119,21 +167,20 @@
 #     port: 8761
 #     targetPort: 8761
 
-#   - service_name: cloud-gateway-service
-#     label_name: cloud-gateway-pod
+#   - service_name: api-gateway-service
+#     label_name: api-gateway-pod
 #     type: ClusterIP
 #     port: 9191
 #     targetPort: 9191
   
 
-# ingress:
-#   enabled: "true"
+ingress:
+  enabled: "true"
 #   name: my-ingress
 #   className: nginx
-#   sslcertificate: arn:aws:acm:us-east-1:365299945243:certificate/8150c196-fd5a-4884-8047-1cdf8ccfc7a7
 #   annotations: {nginx.ingress.kubernetes.io/use-regex: "true"}
 #   rules:
-#   - host: fr1.spcluster.tk
+#   - host: fr1.bootcamp64.tk
 #     http:
 #       paths:
 #       - path: /
@@ -143,7 +190,7 @@
 #             name: frontend-service
 #             port:
 #               number: 80
-#   - host: ms1.spcluster.tk
+#   - host: ms1.bootcamp64.tk
 #     http:
 #       paths:
 #       - path: /
@@ -153,7 +200,7 @@
 #             name: mockserver-service
 #             port:
 #               number: 3005
-#   - host: api1.spcluster.tk
+#   - host: api1.bootcamp64.tk
 #     http:
 #       paths:
 #       - path: /$
@@ -174,7 +221,15 @@
 #         pathType: Prefix
 #         backend:
 #           service:
-#             name: cloud-gateway-service
+#             name: api-gateway-service
 #             port:
 #               number: 9191
 
+
+
+configmaps:
+  - name: mysql-config
+    file: config.cnf
+    content: |
+      [mysqld]
+      max_connections=4000

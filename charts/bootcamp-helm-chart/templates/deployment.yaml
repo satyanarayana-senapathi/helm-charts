@@ -1,25 +1,25 @@
-{{- range .Values.deployments}}
+{{- range .Values.deployments }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .deployment_name}}
+  name: {{ .deployment_name }}
 spec:
-  replicas: {{ .replicaCount}}
+  replicas: {{ .replicaCount }}
   selector:
     matchLabels:
-      app: {{ .label_name}}
+      app: {{ .label_name }}
   template:
     metadata:
       labels:
-        app: {{ .label_name}}
+        app: {{ .label_name }}
     spec:
       containers:
       - name: {{ .container_name }}
         image: {{ .image.repository }}
-        {{- if .envFrom}}
+        {{- if .envFrom }}
         envFrom:
-          - secretRef:
-              name: {{ .envFrom }}
+        - secretRef:
+            name: {{ .envFrom }}
         {{- end }}
         {{- if .env }}
         env: 
@@ -27,18 +27,60 @@ spec:
         {{- end }}
         ports:
         - containerPort: {{ .port }}
-
+        {{- if .livenessProbe }}
+        livenessProbe:
+          httpGet:
+            path: {{ .livenessProbe.path }}
+            port: {{ .livenessProbe.port }}
+          initialDelaySeconds: {{ .livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .livenessProbe.periodSeconds }}
+        {{- end }}
+        {{- if .readinessProbe }}
+        readinessProbe:
+          httpGet:
+            path: {{ .readinessProbe.path }}
+            port: {{ .readinessProbe.port }}
+          initialDelaySeconds: {{ .readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .readinessProbe.periodSeconds }}
+        {{- end }}
         {{- if .volumeMounts }}
         volumeMounts:
         {{- toYaml .volumeMounts | nindent 10 }}
         {{- end }}
       imagePullSecrets:
-        - name: {{ .imagePullSecrets}}
+      - name: {{ .imagePullSecrets }}
+    
+      {{- if .affinity }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: {{ .affinity.nodeSelectorKey }}
+                operator: {{ .affinity.nodeSelectorOperator }}
+                values:
+                - {{ .affinity.nodeSelectorValue }}
+      {{- end }}
+       {{- if .tolerations }}
+      tolerations:
+     
+      {{- range .tolerations }}
+        - key: {{ .key | quote }}
+          operator: {{ .operator | quote }}
+          value: {{ .value | quote }}
+          effect: {{ .effect | quote }}
+      {{- end }}
+      {{- end }}
 
+      {{- if .taints }}
+      nodeSelector:
+        {{- toYaml .taints | nindent 8 }}
+      {{- end }}
       {{- if .volumes }}
       volumes:
       {{- toYaml .volumes | nindent 8 }}
       {{- end }}
-
+      
 ---
-  {{- end }}
+{{- end }}
+
