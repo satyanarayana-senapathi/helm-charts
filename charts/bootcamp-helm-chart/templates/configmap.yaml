@@ -1,0 +1,18 @@
+{{- if .Values.configmaps }}
+{{- range .Values.configmaps }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .name }}
+data:
+  {{ .file }}: |
+{{ .content | indent 4 }}
+
+
+---
+{{- end }}
+{{- end }}
+
+
+
+
