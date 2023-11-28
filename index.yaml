@@ -8,7 +8,7 @@ entries:
     digest: d43863f93651c733c073802dae468929f0cb0bb12a8268182f78b4657ea23fa8
     name: bootcamp-helm-chart
     type: application
-     urls:
+    urls:
     - https://github.com/satyanarayana-senapathi/helm-charts/releases/download/bootcamp-helm-chart-0.1.1/bootcamp-helm-chart-0.1.1.tgz
     version: 0.1.1
 generated: "2023-11-28T16:19:24.750752388+05:30"
