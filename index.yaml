@@ -3,12 +3,12 @@ entries:
   bootcamp-helm-chart:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2023-09-25T13:11:50.874423622Z"
+    created: "2023-11-28T16:19:24.751802387+05:30"
     description: A Helm chart for Kubernetes
-    digest: d83559ca6c5afebeb814ce6ca058cef951a738220ac4284d6c36be893d1af430
+    digest: d43863f93651c733c073802dae468929f0cb0bb12a8268182f78b4657ea23fa8
     name: bootcamp-helm-chart
     type: application
     urls:
-    - https://github.com/satyanarayana-senapathi/helm-charts/releases/download/autho-bootcamp-helm-0.1.0/autho-bootcamp-helm-0.1.0.tgz
+    - bootcamp-helm-chart-0.1.0.tgz
     version: 0.1.1
-generated: "2023-09-25T13:11:50.874449623Z"
+generated: "2023-11-28T16:19:24.750752388+05:30"
