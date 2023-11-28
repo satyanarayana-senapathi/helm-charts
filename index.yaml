@@ -4,11 +4,12 @@ entries:
   - apiVersion: v2
     appVersion: 1.16.0
     created: "2023-11-28T16:19:24.751802387+05:30"
-    description: A Helm chart for Kubernetes
+    description: A Helm chart autho bootcamps
     digest: d43863f93651c733c073802dae468929f0cb0bb12a8268182f78b4657ea23fa8
     name: bootcamp-helm-chart
     type: application
     urls:
-    - bootcamp-helm-chart-0.1.0.tgz
+    - bootcamp-helm-chart-0.1.1.tgz
     version: 0.1.1
 generated: "2023-11-28T16:19:24.750752388+05:30"
+
