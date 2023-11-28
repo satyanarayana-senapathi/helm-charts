@@ -10,5 +10,5 @@ entries:
     type: application
     urls:
     - https://github.com/satyanarayana-senapathi/helm-charts/releases/download/autho-bootcamp-helm-0.1.0/autho-bootcamp-helm-0.1.0.tgz
-    version: 0.1.0
+    version: 0.1.1
 generated: "2023-09-25T13:11:50.874449623Z"
